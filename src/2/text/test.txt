@@ -1,0 +1,14 @@
+prog2-1a
+終了
+
+real    0m0.255s   
+user    0m0.125s   
+sys     0m0.047s   
+
+prog2-1b
+
+終了                 
+                   
+real    0m0.255s   
+user    0m0.125s   
+sys     0m0.047s   
