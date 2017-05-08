@@ -1,0 +1,22 @@
+1: 
+2: #include <stdio.h>
+3: #include <stdlib.h>
+4: 
+5: int main(void){
+6:   int *array1 = (int *)malloc(sizeof(int)*10000);
+7:   int *array2 = (int *)malloc(sizeof(int)*10000);
+8:   int i,j,k;
+9:   for(i=0;i<10000;i++){
+10:     array1[i] = 2 * i - 1;
+11:     array2[i] = 2 * i;
+12:   }
+13:   for(j=0;j<2000;j++){
+14:     for(i=0;i<10000;i++){
+15:       k = array1[i];
+16:       array1[i] = array2[i];
+17:       array2[i] = k;
+18:     }
+19:   }
+20:   printf("終了\n");
+21:   return 0;
+22: }
