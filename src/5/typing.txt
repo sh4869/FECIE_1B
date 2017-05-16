@@ -1,0 +1,8 @@
+test,4
+aaa,4
+korehadame,3
+MySQL,4
+OI,4
+majimeniyare,6
+anosaxa,7
+
