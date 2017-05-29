@@ -34,6 +34,9 @@ void input(){
     } else {
       printf("WRONG!\n");
     }
+    do {
+      ans = getchar();
+    } while(ans != '\n' && ans != EOF);
     printf("score: %d\n",score);
   }
 }
