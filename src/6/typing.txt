@@ -1,0 +1,4 @@
+MySQL,4
+NoSQL,3
+AppEngine,4
+AWSLambda,5

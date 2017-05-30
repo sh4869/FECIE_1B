@@ -1,0 +1,324 @@
+\documentclass[a4j,12pt]{jreport}
+\usepackage{listings}
+\usepackage{plistings}
+\usepackage{color}
+\lstset{%
+  language={C},
+  basicstyle={\small},%
+  identifierstyle={\small},%
+  commentstyle={\small\itshape\color[rgb]{0,0.5,0}},%
+  keywordstyle={\small\bfseries\color[rgb]{0,0,1}},%
+  ndkeywordstyle={\small},%
+  stringstyle={\small\ttfamily\color[rgb]{1,0,1}},
+  frame={tb},
+  breaklines=true,
+  columns=[l]{fullflexible},%
+  numbers=left,%
+  xrightmargin=0zw,%
+  xleftmargin=3zw,%
+  numberstyle={\scriptsize},%
+  stepnumber=1,
+  numbersep=1zw,%
+  lineskip=-0.5ex%
+}
+
+\title{基礎情報演習1B
+第4回～6回レポート}
+\author{AL16030 笠井信宏}
+\begin{document}
+\maketitle
+\chapter{プログラム解説}
+\section{プログラム記載}
+quiz.c，quiz.h，typing.c，typing.h，menu.c，menu.hをそれぞれ載せる．
+
+\begin{lstlisting}[caption=quiz.c,label=quiz.c]
+#include <stdlib.h>
+#include "quiz.h"
+#define N 100
+
+int quizReader(QUIZ *quiz,int *n){
+  int i = 0;
+  FILE *fp;
+  fp = fopen("quiz.txt","r");
+  if(fp == NULL){
+    printf("ファイルの読み込みに失敗しました\n");
+    return -1;
+  }
+  while(fscanf(fp,"%[^,],%[^,],%[^,],%d",quiz[i].question,quiz[i].ans1,quiz[i].ans2,&quiz[i].correct_ans) != EOF && i < N){
+    i++;
+  }
+  *n = i-1;
+  return 0;
+}
+
+void input(){
+  QUIZ *quizzes = (QUIZ *)malloc(sizeof(QUIZ)*100);
+  int num,i,ans,score  = 0;
+  if(quizReader(quizzes,&num)){
+    printf("エラーが発生したようです\n");
+    return;
+  }
+  for(i=0;i<num;i++){
+    printf(quizzes[i].question);
+    printf("\n1: %s,2: %s\n",quizzes[i].ans1,quizzes[i].ans2);
+    scanf("%d",&ans);
+    if(ans == quizzes[i].correct_ans){
+      printf("CORRECT!\n");
+      score += 5;
+    } else {
+      printf("WRONG!\n");
+    }
+    do {
+      ans = getchar();
+    } while(ans != '\n' && ans != EOF);
+    printf("score: %d\n",score);
+  }
+}
+\end{lstlisting}
+
+u.hをそれぞれ載せる．
+
+\begin{lstlisting}[caption=quiz.h,label=quiz.h]
+#ifndef QUIZ_H_
+#define QUIZ_H_
+
+#include <stdio.h>
+
+struct _quiz {
+ char question[50];
+ char ans1[50];
+ char ans2[50];
+ int correct_ans;
+};
+
+typedef struct _quiz QUIZ;
+
+int quizReader(QUIZ *quiz, int *n);
+void input();
+
+#endif
+\end{lstlisting}
+
+\begin{lstlisting}[caption=typing.c,label=typing.c]
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <time.h>
+#include "typing.h"
+#define MAXLEN 100
+
+int DataReader(DATA *dataArray, int *n){
+  FILE *fp;
+  int i = 0;
+  fp = fopen("typing.txt","r");
+  if(fp == NULL) return -1;
+  while(fscanf(fp,"%[^,],%d\n",dataArray[i].string,&dataArray[i].score) != EOF || i > MAXLEN){
+    i++;
+  }
+  *n = i - 1;
+  return 0;
+}
+
+int typing(DATA *dataArray,int n){
+  double diff;
+  double remain_time = 20.0;
+  time_t starttime = time(NULL),endtime;
+  int i=1,number,score = 0;
+
+  char ans[50];
+  while(1){
+    number = rand()%n;
+    printf("%s\n",dataArray[number].string);
+    // 計測
+    starttime = time(NULL);
+    scanf("%s",ans);
+    endtime = time(NULL);
+
+    fflush(stdin);
+
+    if(strcmp(dataArray[number].string,ans) == 0){
+      printf("Great!\n");
+      score += dataArray[number].score;
+      remain_time += (double)dataArray[number].score;
+    } else {
+      printf("Bad...\n");
+      remain_time -= dataArray[number].score;
+    }
+    remain_time -= difftime(endtime,starttime);
+    if(remain_time > 0){
+      printf("%f second left. Your current score is %d\n",remain_time,score);
+    } else {
+      printf("TIME UP! Game Over...\n");
+      break;
+    }
+  }
+  return score;
+}
+\end{lstlisting}
+
+\begin{lstlisting}[caption=typing.h,label=typing.h]
+#ifndef TYPING_H_
+#define TYPING_H_
+
+#define MAXLEN 100
+
+struct _data{
+  char string[50];
+  int score;
+};
+
+typedef struct _data DATA;
+
+int DataReader(DATA *dataArray, int *n);
+int typing(DATA *dataArray, int n);
+
+#endif  /* TYPING_H_ */
+\end{lstlisting}
+
+\begin{lstlisting}[caption=menu.c,label=menu.c]
+#include <stdio.h>
+#include <stdlib.h>
+#include "menu.h"
+#define N 100
+
+void clean_stdio(){
+  int ch;
+  do {
+    ch = getchar();
+  } while(ch != '\n' && ch != EOF );
+}
+
+void menu(){
+  DATA *dataArray = (DATA *)malloc(sizeof(DATA)*N);
+  int n,success,ret = 1;
+  char ch;
+  while(ret==1){
+    printf("---menu---\nq: Quiz\nt: Typing\ne: Exit\n>");
+    ch = getchar();
+    switch(ch){
+      case 'q':
+        input();
+        break;
+      case 't':
+        success = DataReader(dataArray,&n);
+        if(!success) typing(dataArray,n);
+        break;
+      case 'e':
+        ret = 0;
+        break;
+      case '\n':
+        break;
+      default:
+        printf("invalid command\n");
+        clean_stdio();
+        break;
+    }
+  }
+  free(dataArray);
+}
+\end{lstlisting}
+
+\begin{lstlisting}[caption=menu.h,label=menu.h]
+#ifndef MENU_H_
+#define MENU_H_
+#include "quiz.h"
+#include "typing.h"
+
+void clean_stdio();
+void menu();
+#endif
+\end{lstlisting}
+
+\section*{出力記載}
+
+次に，出力を記載する．
+\lstset{%
+  basicstyle={\small},%
+  ndkeywordstyle={\small},%
+  stringstyle={\small\ttfamily\color[rgb]{1,0,1}},
+  frame={tb},
+  breaklines=true,
+  columns=[l]{fullflexible},%
+  xrightmargin=0zw,%
+  xleftmargin=3zw,%
+  numberstyle={\scriptsize},%
+  stepnumber=1,
+  numbersep=1zw,%
+  lineskip=-0.5ex%
+}
+
+\begin{lstlisting}[caption="出力"]
+$ .\menu.exe
+---menu---
+q: Quiz
+t: Typing
+e: Exit
+>q
+What_is_the_first_month_in_a_year?
+1: January,2: December
+1
+CORRECT!
+score: 5
+
+Where_is_the_capital_of_Japan?
+1: Kyoto,2: Tokyo
+1
+WRONG!
+score: 5
+
+What_is_the_name_of_this_building?
+1: Building_2,2:  Building_4
+2
+WRONG!
+score: 5
+---menu---
+q: Quiz
+t: Typing
+e: Exit
+>t
+AppEngine
+AppEngine
+Great!
+22.000000 second left. Your current score is 4
+AppEngine
+AppEngine
+Great!
+22.000000 second left. Your current score is 8
+NoSQL
+NoSQL
+Great!
+22.000000 second left. Your current score is 11
+NoSQL
+NoSQL
+Great!
+22.000000 second left. Your current score is 14
+AppEngine
+AppEngine
+Great!
+23.000000 second left. Your current score is 18
+NoSQL
+NoSQL
+Great!
+20.000000 second left. Your current score is 21
+MySQL
+MYSQL
+Bad...
+12.000000 second left. Your current score is 21
+MySQL
+a
+Bad...
+4.000000 second left. Your current score is 21
+NoSQL
+a
+Bad...
+TIME UP! Game Over...
+---menu---
+q: Quiz
+t: Typing
+e: Exit
+>e
+\end{lstlisting}
+\section{考察}
+今回難点であったのは標準入力のリセットであった．\texttt{getchar}関数を利用する部分において，予期せぬ入力が起きたときに標準入力にバッファが残ってしまい，それがプログラムに予期せぬ動作を起こしていた．それを解決するために利用した\texttt{fflush}関数が，環境事に実装が違うためにエラーが発生していたため，\texttt{clean\_stdio}関数を実装することで解決した．
+Windowsでの実行では\texttt{fflush}で問題なかったが，Linuxでは標準入力にテキストが残ってしまっているようだった．
+\end{document}
