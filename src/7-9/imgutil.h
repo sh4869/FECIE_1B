@@ -1,6 +1,8 @@
 #ifndef IMGUTIL_H_
 #define IMGUTIL_H_
 
+#include <stdio.h>
+
 struct hsv {
   int h,s,v;
 };
