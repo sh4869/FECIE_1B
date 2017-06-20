@@ -4,9 +4,15 @@
 #include <stdlib.h>
 
 void init(POINT *pointArray,int totalPointNum,int initX,int initY){
+  srand((unsigned)time(NULL));
   for(int i = 0;i < totalPointNum;i++){
     pointArray[i].x = initX;
     pointArray[i].y = initY;
+    pointArray[i].r = (rand()%255 + rand()%255 + rand()%255 + rand()%255 + rand()%255) / 7;
+    pointArray[i].b = (rand()%255 + rand()%255 + rand()%255 + rand()%255 + rand()%255) / 7;
+    pointArray[i].g = (rand()%255 + rand()%255 + rand()%255 + rand()%255 + rand()%255) / 7;
+
+    /*
     switch(i%3){
       case 0:
         pointArray[i].r = 255;
@@ -26,8 +32,8 @@ void init(POINT *pointArray,int totalPointNum,int initX,int initY){
       default:
         break;
     }
+    */
   }
-  srand((unsigned)time(NULL));
 }
 
 void move(POINT *pointArray,int i,int w,int h){

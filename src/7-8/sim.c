@@ -4,10 +4,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 int main(int argc, char **argv){
-  int totalPointNum=10;
+  int totalPointNum=4000;
   POINT *pointArray=(POINT *)malloc(totalPointNum*sizeof(POINT));
-  int width=500;
-  int height=500;
+  int width=1500;
+  int height=1500;
   int initX=width/2;
   int initY=height/2;
   int turns=100000;

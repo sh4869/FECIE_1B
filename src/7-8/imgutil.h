@@ -1,6 +1,9 @@
 #ifndef IMGUTIL_H_
 #define IMGUTIL_H_
 
+struct hsv {
+  int h,s,v;
+};
 struct pixel {
   int r,g,b;
 };
