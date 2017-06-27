@@ -37,6 +37,7 @@ void thicken(){
       imgOut->pixels[getLabel(x,y,imgIn->width)].r = r;
       imgOut->pixels[getLabel(x,y,imgIn->width)].g = g;
       imgOut->pixels[getLabel(x,y,imgIn->width)].b = b;
+      printf("%d %d\r",x,y);
     }
   }
   fpOut = fopen("venice-t.bmp","w");

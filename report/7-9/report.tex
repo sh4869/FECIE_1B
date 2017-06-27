@@ -1,0 +1,56 @@
+\documentclass[a4j,12pt]{jreport}
+\usepackage{listings}
+\usepackage{plistings}
+\usepackage{color}
+\usepackage[rm]{roboto}
+\usepackage[T1]{fontenc}
+\lstset{%
+  language={C},
+  basicstyle={\small},%
+  identifierstyle={\small},%
+  commentstyle={\small\itshape\color[rgb]{0,0.5,0}},%
+  keywordstyle={\small\bfseries\color[rgb]{0,0,1}},%
+  ndkeywordstyle={\small},%
+  stringstyle={\small\ttfamily\color[rgb]{1,0,1}},
+  frame={tb},
+  breaklines=true,
+  columns=[l]{fullflexible},%
+  numbers=left,%
+  xrightmargin=0zw,%
+  xleftmargin=3zw,%
+  numberstyle={\scriptsize},%
+  stepnumber=1,
+  numbersep=1zw,%
+  lineskip=-0.5ex%
+}
+\title{基礎情報演習1B第7回～9回 レポート}
+\author{AL16030 笠井信宏}
+\begin{document}
+\maketitle
+\chapter{プログラム解説}
+\section{RandomWalkプログラム解説}
+\subsection{ソースコード記載}
+はじめに，randomwalkプログラムで使用したソースコードを記載する．
+\lstinputlisting[caption=export.c,label=export]{../../src/7-9/export.c}
+\lstinputlisting[caption=imgutil.c,label=imgutil]{../../src/7-9/imgutil.c}
+\lstinputlisting[caption=word.c,label=word]{../../src/7-9/word.c}
+\lstinputlisting[caption=randomWalk.c,label=randomWalk]{../../src/7-9/randomWalk.c}
+なお，ヘッダーファイルに関しては省略した．
+\subsection{解説}
+基本課題から変更した点はない．randomWalk.c内のinit関数においてコメントアウトされている部分に関しては，課題とは違い出力する色をrandomで決めてもっと多様な画像が出力できるようにした．random関数にて取得した値を足し合わせて割っているのは，全体的に落ち着いた値になるように調整するためである．
+\section{Edgeプログラム解説}
+\subsection{ソースコード記載}
+Edgeプログラムに使用したソースコードを記載する．
+\lstinputlisting[caption=edge.c,label=edge]{../../src/7-9/edge.c}
+なお，RandomWalkプログラム解説の際に記載したプログラムや，ヘッダファイル，配布ファイルについては省略した．
+\subsection{解説}
+特筆すべきことはない．tmp\_piexlsにデータを格納することで多少可読性を上げたが，メモリ使用率も同時に上げてしまった．
+また，Windows上のmsys2を利用して開発していたところ，一部import.cが動かないと言った問題によりfree関数の利用が適切でない．
+\section{thickenプログラム解説}
+\subsection{ソースコード記載}
+thickenプログラムに使用したソースコードを記載する．
+\lstinputlisting[caption=thicken.c,label=thicken]{../../src/7-9/thicken.c}
+なお，上記２つのプログラム解説の際に記載したプログラム，ヘッダーファイル，配布ファイルについては省略した．
+\subsection{解説}
+こちらも特に特筆すべきことはない．edge.cと同じようにtemp\_piexlsを利用してプログラムの可読性を上げた．
+\end{document}

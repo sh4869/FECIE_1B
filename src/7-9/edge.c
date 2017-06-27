@@ -39,11 +39,8 @@ void edge(){
   }
   saveImage(fpOut,imgOut);
 
-  // FREE
-  /*
-     free(fpIn);
-     free(fpOut);
-     free(imgIn);
-     free(imgOut);
-     */ 
+  free(fpIn);
+  free(fpOut);
+  free(imgIn);
+  free(imgOut);
 }
